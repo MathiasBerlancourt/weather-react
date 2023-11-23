@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const useGeoCoding = (searchTerm) => {
+const useGetLocations = (searchTerm) => {
   const [locations, setLocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${searchTerm}&count=10&language=fr&format=json`;
@@ -10,14 +10,13 @@ const useGeoCoding = (searchTerm) => {
     const fetchLocation = async () => {
       try {
         const response = await axios.get(url);
-        setLocations(response.data);
+        setLocations(response.data.results);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
       }
     };
-
     fetchLocation();
   }, [searchTerm]);
 
@@ -27,4 +26,4 @@ const useGeoCoding = (searchTerm) => {
   };
 };
 
-export default useGeoCoding;
+export default useGetLocations;
