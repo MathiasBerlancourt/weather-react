@@ -1,30 +1,30 @@
-// custom hook qui va récupérer un objet contenant les informations des villes
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 const useGeoCoding = (searchTerm) => {
-  const [locations, setLocations] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [locations, setLocations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const url = `https://geocoding-api.open-meteo.com/v1/search?name=${searchTerm}&count=10&language=fr&format=json`;
 
-  const fetchLocation = async () => {
-    useEffect(() => {
+  useEffect(() => {
+    const fetchLocation = async () => {
       try {
-        const result = axios.get(`${url}`);
-        setLocations(result.data);
+        const response = await axios.get(url);
+        setLocations(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
+        setIsLoading(false);
       }
-      fetchLocation();
-    }, [searchTerm]);
-  };
+    };
+
+    fetchLocation();
+  }, [searchTerm]);
 
   return {
     locations,
     isLoading,
   };
 };
+
 export default useGeoCoding;

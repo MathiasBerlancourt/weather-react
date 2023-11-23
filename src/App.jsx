@@ -1,22 +1,21 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import WeatherContent from "./WeatherContent";
-import axios from "axios";
 import useGeoCoding from "./api/geocoding";
-import { useEffect } from "react";
-
 import SearchBar from "./SearchBar";
-
 import "./App.css";
 
 function App() {
-  const [searchResult, setSearchResult] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  setSearchQuery("Toulouse");
-  console.log("test usegeocoding:", useGeoCoding(searchQuery));
+  const [searchQuery, setSearchQuery] = useState("Toulouse");
+  const { locations, isLoading } = useGeoCoding(searchQuery);
+
   return (
     <div className="App">
-      <SearchBar />
-      <WeatherContent />
+      <SearchBar setSearchQuery={setSearchQuery} />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <WeatherContent locations={locations} />
+      )}
     </div>
   );
 }
